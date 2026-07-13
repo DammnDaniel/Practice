@@ -323,41 +323,17 @@ public final class CurrentChallenge {
     }
 
     public static boolean canTransition(OrderStatus from, OrderStatus to) {
-        switch (from) {
-            case PENDING:
-                return to.equals(OrderStatus.PAID) || to.equals(OrderStatus.CANCELLED);
-            case PAID:
-                return to.equals(OrderStatus.SHIPPED) || to.equals(OrderStatus.CANCELLED);
-            case SHIPPED:
-                return to.equals(OrderStatus.CANCELLED);
-            default:
-                return false;
-        }
+        return switch (from) {
+            case PENDING -> to == OrderStatus.PAID || to == OrderStatus.CANCELLED;
+            case PAID -> to == OrderStatus.SHIPPED;
+            case SHIPPED, CANCELLED -> false;
+        };
     }
 
     /*
-     * MISMO EJERCICIO con switch de FLECHA (->). Diferencias con el de arriba:
-     *   - la flecha no admite un 'if' suelto: hay que envolverlo en un bloque { }
-     *   - no lleva 'break' (no hay fallthrough)
-     *   - todas las ramas usan '->' (tambien el default)
-     *   - si ningun 'if' se cumple, hace falta un 'return false;' despues del switch
-     *
-     * public static boolean canTransition(OrderStatus from, OrderStatus to) {
-     *     switch (from) {
-     *         case PENDING -> {
-     *             if (to.equals(OrderStatus.PAID) || to.equals(OrderStatus.CANCELLED)) return true;
-     *         }
-     *         case PAID -> {
-     *             if (to.equals(OrderStatus.SHIPPED) || to.equals(OrderStatus.CANCELLED)) return true;
-     *         }
-     *         case SHIPPED -> {
-     *             if (to.equals(OrderStatus.CANCELLED)) return true;
-     *         }
-     *         default -> {
-     *         }
-     *     }
-     *     return false;
-     * }
+     * El switch es una expresion: cada rama produce directamente un boolean.
+     * Con enums se puede comparar mediante == porque cada constante es unica.
+     * SHIPPED y CANCELLED son estados finales, por eso comparten resultado false.
      */
 
     // ---------------------------------------------------------------------

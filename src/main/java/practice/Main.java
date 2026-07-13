@@ -211,8 +211,14 @@ public final class Main {
                 () -> CurrentChallenge.canTransition(OrderStatus.PENDING, OrderStatus.CANCELLED));
         check("pagado a enviado", true,
                 () -> CurrentChallenge.canTransition(OrderStatus.PAID, OrderStatus.SHIPPED));
+        check("pagado a cancelado", false,
+                () -> CurrentChallenge.canTransition(OrderStatus.PAID, OrderStatus.CANCELLED));
         check("enviado a pendiente", false,
                 () -> CurrentChallenge.canTransition(OrderStatus.SHIPPED, OrderStatus.PENDING));
+        check("enviado a cancelado", false,
+                () -> CurrentChallenge.canTransition(OrderStatus.SHIPPED, OrderStatus.CANCELLED));
+        check("cancelado a pendiente", false,
+                () -> CurrentChallenge.canTransition(OrderStatus.CANCELLED, OrderStatus.PENDING));
         check("mismo estado", false,
                 () -> CurrentChallenge.canTransition(OrderStatus.PAID, OrderStatus.PAID));
     }

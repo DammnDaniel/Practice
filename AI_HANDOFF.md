@@ -52,7 +52,6 @@ Durante los primeros ejercicios puede consultar `docs/Chuleta_compacta_Java.pdf`
 
 Pasar los casos actuales no significa que todo el código esté consolidado. Revisiones técnicas pendientes:
 
-- Ejercicio 13: el contrato indica que los estados finales no cambian, pero la implementación permite `SHIPPED -> CANCELLED`. Los tests actuales no cubren esa transición.
 - Ejercicio 15: la validación de positivo está dentro de `finally`; debe moverse al flujo normal después de `Integer.parseInt` para no tapar excepciones.
 - Ejercicio 11: queda un `System.out.println` de depuración.
 - Ejercicio 12: queda una variable local `openingTime` que no se utiliza.
@@ -77,6 +76,7 @@ No debe darse por completado un ejercicio únicamente porque compile. Para marca
 
 Aprendizajes de la sesión del 13 de julio (ejercicios 8–17):
 
+- En el ejercicio 13 se corrigió el contrato de transiciones: `PENDING -> PAID/CANCELLED`, `PAID -> SHIPPED` y los estados `SHIPPED/CANCELLED` no permiten ninguna salida. Se añadieron casos para las transiciones finales que antes no estaban cubiertas.
 - `computeIfAbsent(k, x -> new ArrayList<>())` crea el valor, **lo guarda en el mapa** y lo devuelve; `getOrDefault` NO inserta el valor por defecto (le costó entenderlo en el 10, al agrupar).
 - Para contar, `map.merge(k, 1, Integer::sum)` es la forma corta de "si no existe pon 1, si existe suma".
 - `switch` de flecha `->`: no lleva `break`, no hay fallthrough y no admite un `if` suelto (necesita bloque `{}`); no mezclar `->` con `:` ni con `default:`. Alternativa clásica `case X:` con `return` en cada rama.
@@ -97,7 +97,7 @@ Mejoras menores pendientes en el ejercicio 7, sin bloquear el avance:
 
 - Progreso alcanzado: ejercicios 8–17 implementados y sus casos actuales en verde.
 - Continuar con el 18 sin acelerar a costa de comprender streams.
-- Si queda tiempo, avanzar 19 y 20 y revisar los puntos técnicos pendientes de 11, 12, 13, 15 y 16.
+- Si queda tiempo, avanzar 19 y 20 y revisar los puntos técnicos pendientes de 11, 12, 15 y 16.
 - Antes de terminar el día, explicar sin mirar `Set`, conteos y agrupaciones con `Map`, `Comparator`, `Optional` y diferencia entre `filter` y una operación terminal.
 
 ### Martes 14
