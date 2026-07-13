@@ -44,11 +44,11 @@ Durante los primeros ejercicios puede consultar `docs/Chuleta_compacta_Java.pdf`
 
 ## Estado actual — 13 de julio de 2026
 
-- Ejercicio activo en `Main.java`: **7**.
-- Ejercicios **1–7 implementados**.
-- Ejercicio 7 fue el último verificado: **3 casos correctos y 0 fallidos**.
-- Ejercicios **8–24 pendientes**.
-- Siguiente ejercicio recomendado: **8 — encontrar el primer duplicado usando un `Set`**.
+- Ejercicio activo en `Main.java`: **17**.
+- Ejercicios **1–16 implementados y verificados** (todos pasan sus casos).
+- Ejercicio **17 en progreso**: compila y pasa el caso `orden`, pero **falla `entrada intacta`** porque `values.sort(...)` **muta la lista de entrada**. Solución pendiente: ordenar una **copia** (`new ArrayList<>(values)` + `sort`) o usar `stream().sorted().toList()`. El comparador `comparing(String::length).thenComparing(naturalOrder())` ya es correcto.
+- Ejercicios **18–24 pendientes**.
+- Siguiente paso recomendado: **terminar el 17** (ordenar copia, no mutar) y seguir con **18 — streams** (nombres únicos normalizados, primero con bucle y luego con stream).
 
 No debe darse por completado un ejercicio únicamente porque compile. Para marcarlo como consolidado, Daniel debería poder:
 
@@ -64,8 +64,19 @@ No debe darse por completado un ejercicio únicamente porque compile. Para marca
 - Un stream es perezoso: `stream().filter(...)` sin operación terminal no produce una nueva lista ni modifica la original.
 - Para conservar el cero al eliminar negativos, la condición es `number >= 0`, no `number > 0`.
 - Antes de usar `substring(0, 1)` hay que manejar la cadena vacía.
-- `sort()` modifica la lista; `stream().sorted().toList()` crea un resultado nuevo.
+- `sort()` modifica la lista; `stream().sorted().toList()` crea un resultado nuevo. (Volvió a caer en esto en el 17: hay que ordenar una copia si no se puede mutar la entrada.)
 - La solución más clara es preferible a usar streams únicamente para demostrar que se conocen.
+
+Aprendizajes de la sesión del 13 de julio (ejercicios 8–17):
+
+- `computeIfAbsent(k, x -> new ArrayList<>())` crea el valor, **lo guarda en el mapa** y lo devuelve; `getOrDefault` NO inserta el valor por defecto (le costó entenderlo en el 10, al agrupar).
+- Para contar, `map.merge(k, 1, Integer::sum)` es la forma corta de "si no existe pon 1, si existe suma".
+- `switch` de flecha `->`: no lleva `break`, no hay fallthrough y no admite un `if` suelto (necesita bloque `{}`); no mezclar `->` con `:` ni con `default:`. Alternativa clásica `case X:` con `return` en cada rama.
+- Interfaz funcional + lambda: un `price -> price * 0.80` **es** una `DiscountPolicy` porque adopta el tipo esperado (target typing). Con functional interface no hace falta una clase por tipo; sirven lambdas y una factory (`policyFor`).
+- Diferencia lambda vs referencia a método: `String::length` es la forma corta de `s -> s.length()`.
+- `filter` es intermedia (devuelve `Stream`); para obtener un `Optional` hace falta una operación terminal como `findFirst()`.
+- No castear `String` a `int` con `(int)`; usar `Integer.parseInt(...)` (que además lanza `NumberFormatException`).
+- El `finally` no es el sitio para validar lógica de negocio: se ejecuta siempre y su excepción puede tapar la del `catch`. La validación va en el flujo normal tras convertir. (El 15 pasa los tests igualmente, pero conviene reordenarlo.)
 
 Mejoras menores pendientes en el ejercicio 7, sin bloquear el avance:
 

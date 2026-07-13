@@ -1,6 +1,7 @@
 package practice;
 
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -193,7 +194,14 @@ public final class CurrentChallenge {
     // ---------------------------------------------------------------------
 
     public static Optional<Integer> findFirstDuplicate(List<Integer> numbers) {
-        throw pending(8);
+
+        Set<Integer> fDuplicated = new HashSet<Integer>();
+
+        for(Integer number: numbers){
+            if(!fDuplicated.add(number)) return Optional.of(number);
+        }
+
+        return Optional.empty();
     }
 
     // ---------------------------------------------------------------------
@@ -201,7 +209,16 @@ public final class CurrentChallenge {
     // ---------------------------------------------------------------------
 
     public static Map<String, Integer> countNormalizedWords(List<String> words) {
-        throw pending(9);
+
+        Map<String, Integer> countWords = new HashMap<>();
+        for(String word: words){
+            String normalized = word.toLowerCase().trim();
+            if(!normalized.isEmpty() && !normalized.isBlank()){
+                countWords.put(normalized, countWords.getOrDefault(normalized, 0) + 1);
+            }
+        }
+
+        return countWords;
     }
 
     // ---------------------------------------------------------------------
@@ -211,8 +228,48 @@ public final class CurrentChallenge {
     public record Order(long id, long userId, double total) {
     }
 
+    /*
+     * CHULETA — métodos de Map (cuándo usar cada uno)
+     *
+     *  LEER
+     *   get(k)                  -> valor de k, o null si no está.
+     *   getOrDefault(k, def)    -> valor de k, o 'def' si no está. NO inserta nada.
+     *   containsKey(k)          -> true/false si existe la clave.
+     *
+     *  ESCRIBIR
+     *   put(k, v)               -> mete v en k. Si ya había algo, LO MACHACA. Usar cuando
+     *                              no te importa el valor previo (asignar/reemplazar).
+     *
+     *  ACTUALIZAR SEGÚN LO QUE HAYA (los que confunden)
+     *   computeIfAbsent(k, k -> nuevo)
+     *       Si k NO existe: crea 'nuevo', LO GUARDA y lo devuelve.
+     *       Si k existe:    devuelve el valor que ya hay (no toca nada).
+     *       -> el "get-or-create". IDEAL para AGRUPAR: Map<K, List> / Map<K, Set>.
+     *          .computeIfAbsent(id, k -> new ArrayList<>()).add(x)
+     *
+     *   merge(k, valorInicial, (viejo, nuevo) -> combinado)
+     *       Si k NO existe: pone 'valorInicial'.
+     *       Si k existe:    guarda combinar(viejo, nuevo).
+     *       -> IDEAL para CONTAR:  .merge(palabra, 1, Integer::sum)
+     *
+     *   computeIfPresent(k, (k, v) -> nuevoV)  -> solo actúa si k YA existe.
+     *   compute(k, (k, v) -> ...)              -> siempre recalcula (v puede ser null).
+     *
+     *  REGLA RAPIDA
+     *   contar frecuencias      -> merge  (o getOrDefault + put)
+     *   agrupar en listas/sets  -> computeIfAbsent
+     *   asignar/reemplazar      -> put
+     *   leer con defecto        -> getOrDefault  (recuerda: NO inserta)
+     */
     public static Map<Long, List<Order>> groupOrdersByUser(List<Order> orders) {
-        throw pending(10);
+
+        Map<Long, List<Order>> mapGrouped = new LinkedHashMap<>();
+
+        for (Order order : orders) {
+            mapGrouped.computeIfAbsent(order.userId(), k -> new ArrayList<>()).add(order);
+        }
+
+        return mapGrouped;
     }
 
     // ---------------------------------------------------------------------
@@ -223,7 +280,12 @@ public final class CurrentChallenge {
     }
 
     public static List<Product> sortProducts(List<Product> products) {
-        throw pending(11);
+
+        List<Product>sortedproducts = new ArrayList<practice.CurrentChallenge.Product>(products);
+        sortedproducts.sort(Comparator.comparingDouble(Product::price).reversed().thenComparing(Product::name));
+
+        System.out.println(products.toString());
+        return sortedproducts;
     }
 
     // ---------------------------------------------------------------------
@@ -235,10 +297,18 @@ public final class CurrentChallenge {
             LocalTime openingTime,
             LocalTime closingTime) {
         // Añadiremos validaciones únicamente después de acordar el contrato.
+
+        public OpeningInterval{
+            if (day == null || openingTime == null || closingTime == null) throw new IllegalArgumentException("Cant be null");
+            if(openingTime.isAfter(closingTime)) throw new IllegalArgumentException("Opening time cant be after closing time");
+        }
     }
 
     public static long durationInMinutes(OpeningInterval interval) {
-        throw pending(12);
+
+        LocalTime openingTime = interval.openingTime();
+        long timeBetween = Duration.between( interval.openingTime(), interval.closingTime()).toMinutes() ;
+        return timeBetween;
     }
 
     // ---------------------------------------------------------------------
@@ -253,20 +323,80 @@ public final class CurrentChallenge {
     }
 
     public static boolean canTransition(OrderStatus from, OrderStatus to) {
-        throw pending(13);
+        switch (from) {
+            case PENDING:
+                return to.equals(OrderStatus.PAID) || to.equals(OrderStatus.CANCELLED);
+            case PAID:
+                return to.equals(OrderStatus.SHIPPED) || to.equals(OrderStatus.CANCELLED);
+            case SHIPPED:
+                return to.equals(OrderStatus.CANCELLED);
+            default:
+                return false;
+        }
     }
+
+    /*
+     * MISMO EJERCICIO con switch de FLECHA (->). Diferencias con el de arriba:
+     *   - la flecha no admite un 'if' suelto: hay que envolverlo en un bloque { }
+     *   - no lleva 'break' (no hay fallthrough)
+     *   - todas las ramas usan '->' (tambien el default)
+     *   - si ningun 'if' se cumple, hace falta un 'return false;' despues del switch
+     *
+     * public static boolean canTransition(OrderStatus from, OrderStatus to) {
+     *     switch (from) {
+     *         case PENDING -> {
+     *             if (to.equals(OrderStatus.PAID) || to.equals(OrderStatus.CANCELLED)) return true;
+     *         }
+     *         case PAID -> {
+     *             if (to.equals(OrderStatus.SHIPPED) || to.equals(OrderStatus.CANCELLED)) return true;
+     *         }
+     *         case SHIPPED -> {
+     *             if (to.equals(OrderStatus.CANCELLED)) return true;
+     *         }
+     *         default -> {
+     *         }
+     *     }
+     *     return false;
+     * }
+     */
 
     // ---------------------------------------------------------------------
     // 14. Interfaces y polimorfismo
     // ---------------------------------------------------------------------
 
+    // La abstraccion: define QUE se hace (aplicar un descuento), no COMO.
     @FunctionalInterface
     public interface DiscountPolicy {
         double apply(double originalPrice);
     }
 
+    // Los tipos de cliente a los que aplica un descuento distinto.
+    public enum UserType {
+        NORMAL,
+        VIP,
+        EMPLOYEE
+    }
+
+    // FACTORY: elige la estrategia segun el tipo de usuario.
+    // Cada rama devuelve una DiscountPolicy en forma de lambda,
+    // asi no hace falta una clase por cada tipo de descuento.
+    public static DiscountPolicy policyFor(UserType type) {
+        return switch (type) {
+            case NORMAL   -> price -> price;            // sin descuento
+            case VIP      -> price -> price * 0.80;     // 20%
+            case EMPLOYEE -> price -> price * 0.50;     // 50%
+        };
+    }
+
+    // APLICA la politica al precio. No sabe que descuento es: solo lo aplica.
+    // Anadir un nuevo tipo de descuento NO obliga a tocar este metodo (Open/Closed).
     public static double applyDiscount(double price, DiscountPolicy policy) {
-        throw pending(14);
+        return policy.apply(price);
+    }
+
+    // Une las dos piezas: elige la politica del usuario y la aplica.
+    public static double applyDiscountForUser(double price, UserType type) {
+        return applyDiscount(price, policyFor(type));
     }
 
     // ---------------------------------------------------------------------
@@ -274,7 +404,19 @@ public final class CurrentChallenge {
     // ---------------------------------------------------------------------
 
     public static int parsePositiveInteger(String value) {
-        throw pending(15);
+
+        int convertedString = 0;
+
+
+        try{
+            convertedString = Integer.parseInt(value);
+        }catch (NumberFormatException e){
+            throw new NumberFormatException("Mal formateado");
+        }finally {
+            if(convertedString <= 0 ) throw new IllegalArgumentException("Cant be negative/0" );
+        }
+
+        return convertedString;
     }
 
     // ---------------------------------------------------------------------
@@ -282,10 +424,15 @@ public final class CurrentChallenge {
     // ---------------------------------------------------------------------
 
     public record User(long id, String name) {
+
+
     }
 
     public static Optional<User> findUserById(List<User> users, long id) {
-        throw pending(16);
+        Optional<User> find = users.stream().filter(user -> user.id() == id).findFirst();
+
+      //  return find;
+        return find;
     }
 
     // ---------------------------------------------------------------------
@@ -293,7 +440,14 @@ public final class CurrentChallenge {
     // ---------------------------------------------------------------------
 
     public static List<String> sortByLengthAndAlphabetically(List<String> values) {
-        throw pending(17);
+
+        List<String> copy = new ArrayList<>(values);
+        copy.sort(Comparator.comparing(String::length).thenComparing(Comparator.naturalOrder()));
+
+        return copy;
+
+
+
     }
 
     // ---------------------------------------------------------------------

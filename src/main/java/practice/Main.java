@@ -28,7 +28,7 @@ import static practice.CurrentChallenge.User;
  */
 public final class Main {
 
-    private static final int ACTIVE_EXERCISE = 7;
+    private static final int ACTIVE_EXERCISE = 17;
     private static final double DOUBLE_TOLERANCE = 0.000_001;
 
     private static int passed;
