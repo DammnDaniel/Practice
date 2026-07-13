@@ -45,10 +45,18 @@ Durante los primeros ejercicios puede consultar `docs/Chuleta_compacta_Java.pdf`
 ## Estado actual — 13 de julio de 2026
 
 - Ejercicio activo en `Main.java`: **17**.
-- Ejercicios **1–16 implementados y verificados** (todos pasan sus casos).
-- Ejercicio **17 en progreso**: compila y pasa el caso `orden`, pero **falla `entrada intacta`** porque `values.sort(...)` **muta la lista de entrada**. Solución pendiente: ordenar una **copia** (`new ArrayList<>(values)` + `sort`) o usar `stream().sorted().toList()`. El comparador `comparing(String::length).thenComparing(naturalOrder())` ya es correcto.
+- Ejercicios **1–17 implementados**.
+- Los ejercicios **8–17 han sido ejecutados de nuevo y todos pasan sus casos actuales**. El 17 ya ordena una copia, conserva intacta la entrada y pasa `2/2` casos.
 - Ejercicios **18–24 pendientes**.
-- Siguiente paso recomendado: **terminar el 17** (ordenar copia, no mutar) y seguir con **18 — streams** (nombres únicos normalizados, primero con bucle y luego con stream).
+- Siguiente paso recomendado: cambiar `ACTIVE_EXERCISE` a **18** y resolver nombres únicos normalizados, primero con bucle y después con stream.
+
+Pasar los casos actuales no significa que todo el código esté consolidado. Revisiones técnicas pendientes:
+
+- Ejercicio 13: el contrato indica que los estados finales no cambian, pero la implementación permite `SHIPPED -> CANCELLED`. Los tests actuales no cubren esa transición.
+- Ejercicio 15: la validación de positivo está dentro de `finally`; debe moverse al flujo normal después de `Integer.parseInt` para no tapar excepciones.
+- Ejercicio 11: queda un `System.out.println` de depuración.
+- Ejercicio 12: queda una variable local `openingTime` que no se utiliza.
+- Ejercicio 16: la variable `find` y el comentario pueden simplificarse con un retorno directo, aunque la solución es correcta.
 
 No debe darse por completado un ejercicio únicamente porque compile. Para marcarlo como consolidado, Daniel debería poder:
 
@@ -64,7 +72,7 @@ No debe darse por completado un ejercicio únicamente porque compile. Para marca
 - Un stream es perezoso: `stream().filter(...)` sin operación terminal no produce una nueva lista ni modifica la original.
 - Para conservar el cero al eliminar negativos, la condición es `number >= 0`, no `number > 0`.
 - Antes de usar `substring(0, 1)` hay que manejar la cadena vacía.
-- `sort()` modifica la lista; `stream().sorted().toList()` crea un resultado nuevo. (Volvió a caer en esto en el 17: hay que ordenar una copia si no se puede mutar la entrada.)
+- `sort()` modifica la lista; `stream().sorted().toList()` crea un resultado nuevo. En el 17 el error se corrigió ordenando una copia.
 - La solución más clara es preferible a usar streams únicamente para demostrar que se conocen.
 
 Aprendizajes de la sesión del 13 de julio (ejercicios 8–17):
@@ -87,11 +95,10 @@ Mejoras menores pendientes en el ejercicio 7, sin bloquear el avance:
 
 ### Lunes 13
 
-- Corregir o volver a ejecutar rápidamente los ejercicios 2 y 6 si Daniel quiere confirmar su estado.
-- Completar 8 y 9 (`Set` y conteos con `Map`).
-- Objetivo razonable: llegar a 13.
-- Objetivo ideal, solo si entiende bien lo anterior: llegar a 16.
-- En paralelo, repasar teoría de `Set`, `Map`, agrupación, `Comparator`, records, enums, interfaces, excepciones y `Optional`.
+- Progreso alcanzado: ejercicios 8–17 implementados y sus casos actuales en verde.
+- Continuar con el 18 sin acelerar a costa de comprender streams.
+- Si queda tiempo, avanzar 19 y 20 y revisar los puntos técnicos pendientes de 11, 12, 13, 15 y 16.
+- Antes de terminar el día, explicar sin mirar `Set`, conteos y agrupaciones con `Map`, `Comparator`, `Optional` y diferencia entre `filter` y una operación terminal.
 
 ### Martes 14
 
