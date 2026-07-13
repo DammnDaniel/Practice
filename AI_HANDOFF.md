@@ -44,15 +44,29 @@ Durante los primeros ejercicios puede consultar `docs/Chuleta_compacta_Java.pdf`
 
 ## Estado actual — 13 de julio de 2026
 
-- Ejercicio activo en `Main.java`: **17**.
-- Ejercicios **1–17 implementados**.
-- Los ejercicios **8–17 han sido ejecutados de nuevo y todos pasan sus casos actuales**. El 17 ya ordena una copia, conserva intacta la entrada y pasa `2/2` casos.
-- Ejercicios **18–24 pendientes**.
-- Siguiente paso recomendado: cambiar `ACTIVE_EXERCISE` a **18** y resolver nombres únicos normalizados, primero con bucle y después con stream.
+- Ejercicio activo en `Main.java`: **23**.
+- El bloque guiado de sintaxis queda cerrado con los ejercicios **1–23 implementados**.
+- El antiguo ejercicio 24 y sus modelos preparados se eliminaron para que no anticipen la solución de horarios.
+- Daniel completó el primer simulacro de horarios partiendo de una clase vacía: decidió los records, la firma, el doble recorrido y los límites `[apertura, cierre)`. Después se hicieron pequeñas mejoras de nombres y tipos, se sustituyó el enum propio por `DayOfWeek` y se añadió una alternativa comentada con streams.
+- `InterviewSimulationTest` contiene cuatro casos JUnit: consulta normal, apertura incluida, cierre excluido y negocio cerrado ese día.
+- La implementación del primer simulacro compila y sus cuatro tests pasan.
+- Siguiente paso: practicar cambios de requisitos sobre horarios y después resolver un problema distinto desde cero. La IA no debe proporcionar modelos ni firmas antes de que Daniel los proponga.
+
+## Pistas recibidas sobre la entrevista
+
+Daniel anotó de una llamada breve que otras pruebas podrían haber utilizado un conjunto de datos relacionado con horarios de apertura de negocios y consultas para saber cuándo está abierto un establecimiento. También podrían conversar sobre microservicios, web services, arquitectura, APIs, bases de datos, desarrollo y REST.
+
+Estas pistas son confidenciales, incompletas y no garantizan que su prueba sea igual. Deben utilizarse únicamente para orientar la preparación:
+
+- preparar muy bien el dominio de horarios, intervalos y conjuntos de datos;
+- no buscar ni reproducir una prueba exacta;
+- no descuidar otros problemas de colecciones, transformación, validación y lógica backend;
+- practicar tanto programación como explicación oral de API, persistencia, testing y arquitectura.
+
+Daniel también quiere recuperar soltura escribiendo desde cero clases, records, enums, interfaces e implementaciones, no solo funciones aisladas.
 
 Pasar los casos actuales no significa que todo el código esté consolidado. Revisiones técnicas pendientes:
 
-- Ejercicio 15: la validación de positivo está dentro de `finally`; debe moverse al flujo normal después de `Integer.parseInt` para no tapar excepciones.
 - Ejercicio 11: queda un `System.out.println` de depuración.
 - Ejercicio 12: queda una variable local `openingTime` que no se utiliza.
 - Ejercicio 16: la variable `find` y el comentario pueden simplificarse con un retorno directo, aunque la solución es correcta.
@@ -77,6 +91,7 @@ No debe darse por completado un ejercicio únicamente porque compile. Para marca
 Aprendizajes de la sesión del 13 de julio (ejercicios 8–17):
 
 - En el ejercicio 13 se corrigió el contrato de transiciones: `PENDING -> PAID/CANCELLED`, `PAID -> SHIPPED` y los estados `SHIPPED/CANCELLED` no permiten ninguna salida. Se añadieron casos para las transiciones finales que antes no estaban cubiertas.
+- En el ejercicio 15 se eliminó el `finally`: el `catch` transforma los formatos inválidos en una `NumberFormatException` con mensaje claro y la validación `<= 0` se realiza después, mediante `IllegalArgumentException`.
 - `computeIfAbsent(k, x -> new ArrayList<>())` crea el valor, **lo guarda en el mapa** y lo devuelve; `getOrDefault` NO inserta el valor por defecto (le costó entenderlo en el 10, al agrupar).
 - Para contar, `map.merge(k, 1, Integer::sum)` es la forma corta de "si no existe pon 1, si existe suma".
 - `switch` de flecha `->`: no lleva `break`, no hay fallthrough y no admite un `if` suelto (necesita bloque `{}`); no mezclar `->` con `:` ni con `default:`. Alternativa clásica `case X:` con `return` en cada rama.
@@ -95,17 +110,18 @@ Mejoras menores pendientes en el ejercicio 7, sin bloquear el avance:
 
 ### Lunes 13
 
-- Progreso alcanzado: ejercicios 8–17 implementados y sus casos actuales en verde.
-- Continuar con el 18 sin acelerar a costa de comprender streams.
-- Si queda tiempo, avanzar 19 y 20 y revisar los puntos técnicos pendientes de 11, 12, 15 y 16.
-- Antes de terminar el día, explicar sin mirar `Set`, conteos y agrupaciones con `Map`, `Comparator`, `Optional` y diferencia entre `filter` y una operación terminal.
+- Bloque guiado de sintaxis terminado hasta el ejercicio 23.
+- Comenzar `SIMULACION_01_HORARIOS.md` desde una clase vacía, sin reutilizar los modelos que antes proporcionaba el ejercicio 24.
+- Antes de programar, explicar requisitos, límites de los intervalos, casos y modelo propuesto.
 
 ### Martes 14
 
-- Streams, fechas y horas e intervalos.
-- Ejercicio integrado de horarios comerciales.
-- Al menos un simulacro sin firmas ni clases preparadas.
-- Repaso oral de experiencia, REST, bases de datos, testing, microservicios y arquitectura.
+- Explicar de nuevo el simulacro 01: modelo, algoritmo, límites, tests y complejidad.
+- Introducir cambios sobre horarios: cruces de medianoche, negocio abierto 24 horas, intervalos múltiples y datos inválidos. La IA debe entregar requisitos progresivamente, no la solución.
+- Hacer un simulacro diferente desde una clase vacía para evitar sobreajustarse a la pista.
+- Hacer un ejercicio breve donde Daniel escriba una interfaz, una implementación en memoria y un servicio que dependa de la interfaz.
+- Repaso oral de REST, códigos HTTP, diseño de endpoints, base de datos, transacciones, testing, microservicios y arquitectura.
+- Practicar presentación de experiencia y respuestas sobre Java frente a Go.
 
 ### Miércoles 15
 
@@ -148,11 +164,13 @@ git push
 
 ## Fases posteriores
 
-La lista de 24 ejercicios es solo el calentamiento de sintaxis. Después deben realizarse:
+La lista guiada de 23 ejercicios es solo el calentamiento de sintaxis. Después deben realizarse:
 
 1. problemas combinados con menos pistas;
 2. ejercicios de horarios con `LocalTime`, intervalos, agrupación y filtrado;
 3. pruebas en las que quizá sea necesario crear records, clases o interfaces;
 4. simulacros completos con enunciado únicamente, cronómetro, ejecución y explicación final.
+
+La ruta sugerida de simulacros está en `exercises/simulations/ROADMAP.md`.
 
 Que selección haya dicho «programar una función» no garantiza que toda la prueba sea una única función trivial. Puede ser razonable crear pequeñas clases, records, enums o interfaces si el modelo lo necesita, pero no se debe sobrearquitecturar.

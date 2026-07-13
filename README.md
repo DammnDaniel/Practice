@@ -7,6 +7,7 @@ Entorno mínimo para preparar una prueba técnica de live coding en Java, sin IA
 - `docs/Guia_compacta_sintaxis_Java.pdf`: repaso completo con ejemplos, métodos y resultados.
 - `docs/Chuleta_compacta_Java.pdf`: consulta rápida durante los primeros ejercicios.
 - `exercises/EJERCICIOS_SINTAXIS.md`: hoja editable con los ejercicios por apartado y el control de progreso.
+- `exercises/simulations/`: enunciados completos sin firmas ni modelos preparados.
 
 Empieza leyendo la guía. Después abre `EJERCICIOS_SINTAXIS.md` y trabaja un apartado cada vez en `CurrentChallenge.java` y `Main.java`.
 
@@ -58,11 +59,13 @@ Durante un simulacro real:
 ```text
 src/main/java/practice/
 ├── Main.java               casos ejecutables y mini comprobador
-└── CurrentChallenge.java   única función que debes implementar
+├── CurrentChallenge.java   cuaderno acumulado de sintaxis
+└── InterviewSimulation.java punto de entrada vacío para simulacros
 
 exercises/
 ├── PROGRESSION.md          mapa de dificultad, sin soluciones
-└── INTERVIEW_CHECKLIST.md  chuleta del proceso de live coding
+├── INTERVIEW_CHECKLIST.md  chuleta del proceso de live coding
+└── simulations/            enunciados estilo prueba real
 ```
 
 ## JUnit opcional

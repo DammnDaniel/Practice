@@ -222,18 +222,7 @@ Devuelve los `k` valores mayores de una colección sin ordenar completamente tod
 
 ## 23. Testing
 
-Escoge uno de los ejercicios anteriores y prepara casos para: flujo normal, entrada vacía, valor límite, duplicados y entrada inválida cuando forme parte del contrato.
-
-### Mis notas
-
-
----
-
-## 24. Integración - horarios comerciales
-
-Dado un conjunto de tiendas con sus intervalos de apertura en memoria, devuelve las tiendas abiertas en un día y una hora determinados.
-
-Primera versión: un intervalo por día. Después añadiremos varios intervalos, horarios nocturnos y cambios de requisitos.
+Implementa y prueba un cálculo de envío con esta regla: coste base de 5, más 1 por kilómetro y un suplemento de 10 si es prioritario. Una distancia negativa es inválida.
 
 ### Mis notas
 
@@ -267,4 +256,3 @@ Primera versión: un intervalo por día. Después añadiremos varios intervalos,
 | 21 | Queue/Deque | [ ] | [ ] | [ ] |
 | 22 | PriorityQueue | [ ] | [ ] | [ ] |
 | 23 | Testing | [ ] | [ ] | [ ] |
-| 24 | Integración final | [ ] | [ ] | [ ] |

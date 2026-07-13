@@ -10,7 +10,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import static practice.CurrentChallenge.Business;
 import static practice.CurrentChallenge.BusinessId;
 import static practice.CurrentChallenge.DiscountPolicy;
 import static practice.CurrentChallenge.OpeningInterval;
@@ -28,7 +27,7 @@ import static practice.CurrentChallenge.User;
  */
 public final class Main {
 
-    private static final int ACTIVE_EXERCISE = 17;
+    private static final int ACTIVE_EXERCISE = 23;
     private static final double DOUBLE_TOLERANCE = 0.000_001;
 
     private static int passed;
@@ -62,7 +61,6 @@ public final class Main {
             case 21 -> runExercise21();
             case 22 -> runExercise22();
             case 23 -> runExercise23();
-            case 24 -> runExercise24();
             default -> throw new IllegalArgumentException("Unknown exercise: " + ACTIVE_EXERCISE);
         }
 
@@ -235,7 +233,7 @@ public final class Main {
 
     private static void runExercise15() {
         check("válido", 25, () -> CurrentChallenge.parsePositiveInteger("25"));
-        checkThrows("texto inválido", IllegalArgumentException.class,
+        checkThrows("texto inválido", NumberFormatException.class,
                 () -> CurrentChallenge.parsePositiveInteger("hello"));
         checkThrows("cero", IllegalArgumentException.class,
                 () -> CurrentChallenge.parsePositiveInteger("0"));
@@ -326,31 +324,6 @@ public final class Main {
                 () -> CurrentChallenge.calculateShippingCost(0, false));
         checkThrows("distancia negativa", IllegalArgumentException.class,
                 () -> CurrentChallenge.calculateShippingCost(-1, false));
-    }
-
-    // Varios intervalos por tienda; intervalo [apertura,cierre); sin cruce de medianoche.
-    private static void runExercise24() {
-        Business bakery = new Business(1, "Bakery", List.of(
-                new OpeningInterval(DayOfWeek.MONDAY, LocalTime.of(8, 0), LocalTime.of(14, 0))));
-        Business restaurant = new Business(2, "Restaurant", List.of(
-                new OpeningInterval(DayOfWeek.MONDAY, LocalTime.of(12, 0), LocalTime.of(16, 0)),
-                new OpeningInterval(DayOfWeek.MONDAY, LocalTime.of(19, 0), LocalTime.of(23, 0))));
-        Business closedOnMonday = new Business(3, "Weekend shop", List.of(
-                new OpeningInterval(DayOfWeek.SATURDAY, LocalTime.of(9, 0), LocalTime.of(20, 0))));
-        List<Business> businesses = List.of(bakery, restaurant, closedOnMonday);
-
-        check("lunes a las 13", List.of(bakery, restaurant),
-                () -> CurrentChallenge.findOpenBusinesses(
-                        businesses, DayOfWeek.MONDAY, LocalTime.of(13, 0)));
-        check("lunes a las 18", List.of(),
-                () -> CurrentChallenge.findOpenBusinesses(
-                        businesses, DayOfWeek.MONDAY, LocalTime.of(18, 0)));
-        check("apertura incluida", List.of(bakery),
-                () -> CurrentChallenge.findOpenBusinesses(
-                        businesses, DayOfWeek.MONDAY, LocalTime.of(8, 0)));
-        check("cierre excluido", List.of(),
-                () -> CurrentChallenge.findOpenBusinesses(
-                        businesses, DayOfWeek.MONDAY, LocalTime.of(23, 0)));
     }
 
     private static <T> void check(String name, T expected, CheckedSupplier<T> action) {

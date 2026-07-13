@@ -10,11 +10,11 @@ class CurrentChallengeTest {
 
     @Test
     void sumsEvenNumbers() {
-        assertEquals(12, CurrentChallenge.solve(List.of(1, 2, 4, 5, 6)));
+        assertEquals(12, CurrentChallenge.sumEvenNumbers(List.of(1, 2, 4, 5, 6)));
     }
 
     @Test
     void emptyListReturnsZero() {
-        assertEquals(0, CurrentChallenge.solve(List.of()));
+        assertEquals(0, CurrentChallenge.sumEvenNumbers(List.of()));
     }
 }

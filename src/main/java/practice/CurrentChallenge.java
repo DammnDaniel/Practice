@@ -380,19 +380,19 @@ public final class CurrentChallenge {
     // ---------------------------------------------------------------------
 
     public static int parsePositiveInteger(String value) {
+        final int convertedValue;
 
-        int convertedString = 0;
-
-
-        try{
-            convertedString = Integer.parseInt(value);
-        }catch (NumberFormatException e){
-            throw new NumberFormatException("Mal formateado");
-        }finally {
-            if(convertedString <= 0 ) throw new IllegalArgumentException("Cant be negative/0" );
+        try {
+            convertedValue = Integer.parseInt(value);
+        } catch (NumberFormatException exception) {
+            throw new NumberFormatException("Invalid integer format: " + value);
         }
 
-        return convertedString;
+        if (convertedValue <= 0) {
+            throw new IllegalArgumentException("The number must be positive");
+        }
+
+        return convertedValue;
     }
 
     // ---------------------------------------------------------------------
@@ -431,11 +431,31 @@ public final class CurrentChallenge {
     // ---------------------------------------------------------------------
 
     public static List<String> normalizeUniqueNamesWithLoop(List<String> names) {
-        throw pending(18);
+        List<String> normalizedNames = new ArrayList<>();
+        Set<String> seenNames = new HashSet<>();
+
+        for (String name : names) {
+            String normalizedName = name.trim().toLowerCase();
+
+            if (!normalizedName.isBlank() && seenNames.add(normalizedName)) {
+                normalizedNames.add(normalizedName);
+            }
+        }
+
+        normalizedNames.sort(Comparator.naturalOrder());
+        return normalizedNames;
     }
 
     public static List<String> normalizeUniqueNamesWithStream(List<String> names) {
-        throw pending(18);
+        List<String> copy = new ArrayList<>(names);
+
+        List<String> filteredList = copy.stream()
+                .filter(a -> !a.isBlank())
+                .map(name -> name.trim().toLowerCase())
+                .distinct()
+                .sorted(Comparator.naturalOrder()).toList();
+
+        return filteredList;
     }
 
     // ---------------------------------------------------------------------
@@ -446,7 +466,18 @@ public final class CurrentChallenge {
             LocalTime time,
             LocalTime openingTime,
             LocalTime closingTime) {
-        throw pending(19);
+
+        //  8:00 - 17:00
+        //  22:00 - 8:00
+
+      if(openingTime.isBefore(closingTime)){
+          return ((time.equals(openingTime) || time.isAfter(openingTime)) && time.isBefore(closingTime));
+      }else{
+          return ((time.equals(openingTime) || time.isAfter(openingTime))  || time.isBefore(closingTime));
+      }
+
+
+
     }
 
     // ---------------------------------------------------------------------
@@ -454,10 +485,14 @@ public final class CurrentChallenge {
     // ---------------------------------------------------------------------
 
     public record BusinessId(String countryCode, String registrationNumber) {
+
+
     }
 
-    public static Set<BusinessId> uniqueBusinessIds(List<BusinessId> ids) {
-        throw pending(20);
+    public static Set<BusinessId> uniqueBusinessIds(
+            List<BusinessId> ids) {
+
+        return new HashSet<>(ids);
     }
 
     // ---------------------------------------------------------------------
@@ -465,7 +500,32 @@ public final class CurrentChallenge {
     // ---------------------------------------------------------------------
 
     public static boolean hasBalancedBrackets(String text) {
-        throw pending(21);
+        Deque<Character> openings = new ArrayDeque<>();
+
+        for (char character : text.toCharArray()) {
+            if (character == '(' || character == '[' || character == '{') {
+                openings.push(character);
+                continue;
+            }
+
+            if (character == ')' || character == ']' || character == '}') {
+                if (openings.isEmpty()) {
+                    return false;
+                }
+
+                char lastOpening = openings.pop();
+                boolean matches =
+                        character == ')' && lastOpening == '('
+                        || character == ']' && lastOpening == '['
+                        || character == '}' && lastOpening == '{';
+
+                if (!matches) {
+                    return false;
+                }
+            }
+        }
+
+        return openings.isEmpty();
     }
 
     // ---------------------------------------------------------------------
@@ -473,7 +533,23 @@ public final class CurrentChallenge {
     // ---------------------------------------------------------------------
 
     public static List<Integer> findLargestValues(List<Integer> values, int k) {
-        throw pending(22);
+        if (k == 0) {
+            return List.of();
+        }
+
+        PriorityQueue<Integer> largestValues = new PriorityQueue<>();
+
+        for (int value : values) {
+            largestValues.offer(value);
+
+            if (largestValues.size() > k) {
+                largestValues.poll();
+            }
+        }
+
+        List<Integer> result = new ArrayList<>(largestValues);
+        result.sort(Comparator.reverseOrder());
+        return result;
     }
 
     // ---------------------------------------------------------------------
@@ -481,28 +557,16 @@ public final class CurrentChallenge {
     // ---------------------------------------------------------------------
 
     public static int calculateShippingCost(int distanceKm, boolean priority) {
-        throw pending(23);
-    }
+        if (distanceKm < 0) {
+            throw new IllegalArgumentException("Distance cannot be negative");
+        }
 
-    // ---------------------------------------------------------------------
-    // 24. Integración final - horarios comerciales
-    // ---------------------------------------------------------------------
+        int cost = 5 + distanceKm;
 
-    public record Business(
-            long id,
-            String name,
-            List<OpeningInterval> openingHours) {
-    }
+        if (priority) {
+            cost += 10;
+        }
 
-    public static List<Business> findOpenBusinesses(
-            List<Business> businesses,
-            DayOfWeek day,
-            LocalTime time) {
-        throw pending(24);
-    }
-
-    private static UnsupportedOperationException pending(int exerciseNumber) {
-        return new UnsupportedOperationException(
-                "Implementa el ejercicio " + exerciseNumber + " cuando sea el ejercicio activo");
+        return cost;
     }
 }
