@@ -65,6 +65,8 @@ Estas pistas son confidenciales, incompletas y no garantizan que su prueba sea i
 
 Daniel también quiere recuperar soltura escribiendo desde cero clases, records, enums, interfaces e implementaciones, no solo funciones aisladas.
 
+La nota «buscar horarios donde siempre esté abierto» puede significar apertura continua durante un rango solicitado o un establecimiento abierto 24/7. La ruta de simulacros contempla ambas interpretaciones y recuerda que Daniel debe aclarar ese requisito antes de programar.
+
 Pasar los casos actuales no significa que todo el código esté consolidado. Revisiones técnicas pendientes:
 
 - Ejercicio 11: queda un `System.out.println` de depuración.

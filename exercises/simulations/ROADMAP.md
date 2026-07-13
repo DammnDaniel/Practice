@@ -16,13 +16,23 @@ Estado: completado.
 
 Entregar los cambios uno a uno después de que Daniel explique cómo afectan al modelo:
 
+- obtener y mostrar los horarios de un negocio concreto;
+- comprobar si un negocio permanece abierto durante un rango completo, no solo en un instante;
+- encontrar negocios abiertos 24 horas durante un día;
+- distinguir entre «abierto durante todo el rango solicitado» y «abierto 24/7 todos los días»;
 - intervalos que cruzan medianoche;
-- establecimientos abiertos 24 horas;
 - intervalos solapados o inválidos;
 - consulta de próximos horarios o siguiente apertura;
 - volumen grande de consultas y posibles índices en memoria.
 
 No es necesario implementar todas las variantes. Priorizar razonamiento, límites y adaptación del código existente.
+
+La frase anotada en la llamada —«buscar horarios donde siempre esté abierto»— es ambigua. Durante la práctica deben cubrirse por separado estas dos interpretaciones:
+
+1. El negocio está abierto sin interrupciones durante un intervalo solicitado, por ejemplo de 12:30 a 15:30.
+2. El negocio está abierto permanentemente, ya sea 24 horas en un día o 24/7 durante toda la semana.
+
+No asumir cuál aparecerá en la entrevista; aclarar el significado antes de programar sería una buena pregunta al entrevistador.
 
 ## 3. Clases e interfaces
 
