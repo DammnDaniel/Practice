@@ -10,6 +10,8 @@ Entorno mínimo para preparar una prueba técnica de live coding en Java, sin IA
 
 Empieza leyendo la guía. Después abre `EJERCICIOS_SINTAXIS.md` y trabaja un apartado cada vez en `CurrentChallenge.java` y `Main.java`.
 
+Consulta también `AI_HANDOFF.md` para conocer el progreso actual y continuar con otra IA o en una conversación nueva.
+
 ## Abrir y ejecutar en IntelliJ
 
 1. Abre IntelliJ IDEA.
